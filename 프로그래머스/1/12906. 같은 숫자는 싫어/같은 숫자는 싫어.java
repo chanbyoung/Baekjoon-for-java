@@ -15,7 +15,7 @@ public class Solution {
         }
         int[] result = new int[stack.size()];
         for (int i = stack.size()-1; i >= 0 ; i--) {
-            result[i] = stack.get(i);
+            result[i] = stack.pop();
         }
         return result;
     }
