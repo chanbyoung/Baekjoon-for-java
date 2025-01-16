@@ -1,25 +1,33 @@
+import java.util.*;
+
 class Solution {
+    private static final int[] dx = {1, -1, 0, 0};
+    private static final int[] dy = {0, 0, 1, -1};
+
+    private static boolean[][] visit;
+
     public int solution(String[][] board, int h, int w) {
-        int n = board.length; // 1. board의 길이를 저장
-        int count = 0; // 2. 같은 색으로 색칠된 칸의 개수를 저장하는 변수
-        
-        // 3. h, w의 변화량을 저장하는 리스트
-        int[] dh = {0, 1, -1, 0};
-        int[] dw = {1, 0, 0, -1};
-
-        // 4. 반복문을 통해 4방향 탐색
+        visit = new boolean[board.length][board[0].length];
+        return bfs(board, board[h][w], h, w);
+    }
+    private int bfs(String[][] board, String color, int x, int y) {
+        Queue<int[]> q = new LinkedList<>();
+        visit[x][y] = true;
+        q.add(new int[]{x, y});
+        int sum = 0;
+        int[] poll = q.poll();
         for (int i = 0; i < 4; i++) {
-            int h_check = h + dh[i]; // 4-1. 체크할 h 좌표
-            int w_check = w + dw[i]; // 4-1. 체크할 w 좌표
-
-            // 4-2. h_check와 w_check가 유효한 범위 내에 있는지 확인
-            if (h_check >= 0 && h_check < n && w_check >= 0 && w_check < n) {
-                // 4-2-a. 같은 색이면 count 증가
-                if (board[h][w].equals(board[h_check][w_check])) {
-                    count++;
-                }
+            int cx = poll[0] + dx[i];
+            int cy = poll[1] + dy[i];
+            if (cx < 0 || cx >= board.length || cy < 0 || cy >= board[0].length)
+                continue;
+            if (!visit[cx][cy] && board[cx][cy].equals(color)) {
+                visit[cx][cy] = true;
+                q.add(new int[]{cx, cy});
+                sum++;
             }
         }
-        return count; // 5. count 반환
+        return sum;
+
     }
 }
